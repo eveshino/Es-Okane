@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
+import { api } from "../../services/api";
 import { Container } from "./styles";
 
+interface Transaction {
+  id: number;
+  title: string;
+  category: string;
+  amount: number;
+  createdAt: string;
+  type: string;
+}
+
 export function TransactionTable() {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    api
+      .get("/transactions")
+      // dont forget that is not returning a object with an array inside (response.data.transactions  )
+      .then((response) => setTransactions(response.data.transactions));
+  }, []);
+
   return (
     <Container>
       <table>
@@ -12,21 +32,27 @@ export function TransactionTable() {
             <th>Data</th>
           </tr>
         </thead>
-
         <tbody>
-          <tr>
-            <td className="title">Website develop</td>
-            <td className="deposit">¥100.000</td>
-            <td>Develop</td>
-            <td>2021/06/05</td>
-          </tr>
-
-          <tr>
-            <td className="title">Rent</td>
-            <td className="withdraw">-¥55.000</td>
-            <td>Apartment</td>
-            <td>2021/05/25</td>
-          </tr>
+          {transactions.map((transaction) => {
+            //for each transaction i will return this html
+            return (
+              <tr key={transaction.id}>
+                <td>{transaction.title}</td>
+                <td className={transaction.type}>
+                  {new Intl.NumberFormat("ja-JP", {
+                    style: "currency",
+                    currency: "JPY",
+                  }).format(transaction.amount)}
+                </td>
+                <td>{transaction.category}</td>
+                <td>
+                  {new Intl.DateTimeFormat("ja-JP").format(
+                    new Date(transaction.createdAt)
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </Container>
