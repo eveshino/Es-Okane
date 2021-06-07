@@ -30,4 +30,8 @@ export const Container = styled.div`
       color: #fff;
     }
   }
+  .yen {
+    width: 25px;
+    height: 25px;
+  }
 `;

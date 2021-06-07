@@ -13,7 +13,6 @@ export function Header({ onOpenNewTransactionModal }: HeaderProps) {
       <Content>
         <div className="logoDiv">
           <img className="logo" src={logo} alt="es okane"></img>
-          <h2>ES金</h2>
         </div>
 
         <button type="button" onClick={onOpenNewTransactionModal}>
